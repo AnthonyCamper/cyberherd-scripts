@@ -1,1 +1,0 @@
-curl https://static.snyk.io/cli/latest/snyk-win.exe -o snyk.exe
