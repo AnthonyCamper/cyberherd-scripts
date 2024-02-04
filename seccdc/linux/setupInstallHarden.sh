@@ -77,6 +77,13 @@ cp -r /etc /backup/initial/etc
 ############################## BACKUP /home
 cp -r /home /backup/initial/home
 
+############################## BACKUP /bin
+cp -r /bin /backup/initial/bin
+
+############################## BACKUP /usr/bin
+cp -r /usr/bin /backup/initial/usr/bin
+
+
 ################################## INSTALL SNOOPY
 echo "Installing Snoopy Logger..."
 wget -O install-snoopy.sh https://github.com/a2o/snoopy/raw/install/install/install-snoopy.sh &&
