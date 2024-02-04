@@ -18,10 +18,7 @@ dave.grohl
 kate.skye
 leo.zenith
 jack.rover
-sudo
 root
-adm
-syslog
 )
 
 # Function to check if a user is in the administratorGroup
