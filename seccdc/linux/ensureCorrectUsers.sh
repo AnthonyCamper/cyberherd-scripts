@@ -131,4 +131,10 @@ while true; do
         [ -f "$home/.bashrc" ] && chown "$username" "$home/.bashrc"
         [ -f "$home/.zshrc" ] && chown "$username" "$home/.zshrc"
 
-   
+    done < /etc/passwd
+
+    echo "Shell history output redirected to /dev/null for all users."
+
+    # Wait for 4 minutes before running the script again
+    sleep 240
+done
