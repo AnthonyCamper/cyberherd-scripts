@@ -13,9 +13,6 @@ Function InstallHardeningKitty() {
     Import-Module "$Env:ProgramFiles\WindowsPowerShell\Modules\HardeningKitty\$Version\HardeningKitty.psm1"
 }
 InstallHardeningKitty
-
-cd
-
 # Make a Backup
 Invoke-HardeningKitty -Mode Config -Backup
 
