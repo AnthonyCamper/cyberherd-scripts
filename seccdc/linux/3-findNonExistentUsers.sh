@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Goal of this script is to find users that are unauthorized, with a login shell.
 valid_shells=(/bin/bash /bin/sh /usr/bin/zsh /usr/bin/fish)
 
 predefined_users=(

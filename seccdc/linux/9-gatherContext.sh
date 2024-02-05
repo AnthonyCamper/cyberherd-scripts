@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# Goal of this script is to identify undesired users, and enumerate common information such as system crontabs, services, administrators, hostname, and so on.
 normalUsers=(
 lucy.nova
 xavier.blackhole

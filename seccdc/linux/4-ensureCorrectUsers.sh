@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# The usage of this script, is a repeating loop that ensures the required users exist with admin access.
 while true; do
     ###################################################### SCORECHECK USER #################################################
     DONOTTOUCH=(

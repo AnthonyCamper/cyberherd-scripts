@@ -1,4 +1,3 @@
-# replace IP with bad actor's ip.
 #!/bin/bash
 
 echo -n "Enter IP Address:"

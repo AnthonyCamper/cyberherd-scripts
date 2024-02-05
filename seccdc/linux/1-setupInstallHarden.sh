@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Setup by installing required programs like dependencies, git, fail2ban, and ufw, configure what is nessesary, and do some basic hardening.
+# Usage bash 1setupInstallHarde.sh <port1> <port2> (bash 1setupInstallHarde.sh 22 80 443 8080)
 if [ $(whoami) != "root" ]; then
     echo "Script must be run as root"
     exit 1

@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Install snoopy if it is not already installed, and will automatically get snoopy log files.
+
 echo "Installing Snoopy Logger..."
 wget -O install-snoopy.sh https://github.com/a2o/snoopy/raw/install/install/install-snoopy.sh &&
 chmod 755 install-snoopy.sh &&

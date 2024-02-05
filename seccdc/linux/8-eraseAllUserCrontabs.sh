@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# The usage of this script is to erase all crontabs.
 sudo bash -c 'for user in $(cut -d: -f1 /etc/passwd); do crontab -r -u $user 2>/dev/null; done'
 
 cmd_pattern='(curl|wget|bash|sh|zsh|mkfifo|python|perl|ruby|nc|netcat)'

@@ -1,5 +1,5 @@
 #!/bin/bash
-
+# This will rotate all SSH keys and passwords, logging as required. User will be prompted for the password.
 excludeUser="seccdc_black"
 
 administratorGroup=(
