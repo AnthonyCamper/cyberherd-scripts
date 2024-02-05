@@ -144,6 +144,12 @@ echo -e "[IP/MAC]\n$(ip -br -c a || ip a)\n" | tee -a context.txt
 echo -e "[Routes]\n$(ip r)\n" | tee -a context.txt
 echo -e "[Services]\n$(ss -tulpan)\n" | tee -a context.txt
 
+echo "############# Checking CronTabs in /etc/crontab" 
+cat /etc/crontab | tee -a context.txt
+echo "############# Checking All Services in /etc/crontab" 
+systemctl list-units --type=service --all | tee context.txt
+
+
 # Check for unauthorized users
 unauthorizedUsers=()
 unauthorizedAdmins=()
@@ -166,3 +172,4 @@ fi
 if [ ${#unauthorizedAdmins[@]} -ne 0 ]; then
   echo "ALERT: UNAUTHORIZED ADMINISTRATOR DETECTED:" "${unauthorizedAdmins[@]}" | tee -a context.txt
 fi
+
