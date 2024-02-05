@@ -65,20 +65,21 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
                 echo "Failed to change password for $username"
                 continue
             fi
+            
+        userSshDir="$home/.ssh"
+        if [[ "$shell" == *sh ]]; then
+            mkdir -p $userSshDir
+            chmod 700 "$userSshDir"
+            chown -R "$username":"$gid" "$userSshDir" 
+            cp "$sshKey" "$userSshDir/id_rsa"
+            cp "$sshKey.pub" "$userSshDir/id_rsa.pub"
+            cat "$sshKey.pub" > "$userSshDir/authorized_keys"
+            chown -R "$username":"$gid" "$userSshDir" 
+            chmod 600 "$userSshDir/id_rsa"
+            chmod 644 "$userSshDir/id_rsa.pub" "$userSshDir/authorized_keys"
+            echo "Shared SSH keys set for $username."
         fi
-    userSshDir="$home/.ssh"
-    if [[ "$shell" == *sh ]]; then
-        mkdir -p $userSshDir
-        chmod 700 "$userSshDir"
-        chown -R "$username":"$gid" "$userSshDir" 
-        cp "$sshKey" "$userSshDir/id_rsa"
-        cp "$sshKey.pub" "$userSshDir/id_rsa.pub"
-        cat "$sshKey.pub" > "$userSshDir/authorized_keys"
-        chown -R "$username":"$gid" "$userSshDir" 
-        chmod 600 "$userSshDir/id_rsa"
-        chmod 644 "$userSshDir/id_rsa.pub" "$userSshDir/authorized_keys"
-        echo "Shared SSH keys set for $username."
-    fi
+        fi
     fi
 done
 
