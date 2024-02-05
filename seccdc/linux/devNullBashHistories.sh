@@ -10,12 +10,9 @@ fi
 
 # Loop through each user's home directory
 getent passwd | while IFS=: read -r username _ uid gid _ home shell; do
-  # Check if the user's shell is bash
-  if [[ "$shell" == */bash ]]; then
-    # Only proceed if the home directory exists and is a directory
+  if [[ "$shell" == *sh ]]; then
     if [ -d "$home" ]; then
-      bashrc="${home}/.bashrc"
-      # Backup the current .bashrc if it exists
+      bashrc="${home}/.*shrc"
       if [ -f "$bashrc" ]; then
         cp "$bashrc" "${bashrc}.backup"
       fi
