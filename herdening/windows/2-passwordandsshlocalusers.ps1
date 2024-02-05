@@ -9,7 +9,7 @@ $NormalUsers=@("lucy.nova", "xavier.blackhole", "ophelia.redding", "marcus.atlas
 $LocalUsers=@()
 $DomainUsers=@()
 
-function Generate-Password {
+function New-Password {
     $PasswordLength = 23
     $PasswordChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789@#$%&!?:*-+="
     $Password = ""
@@ -23,7 +23,7 @@ function Generate-Password {
 foreach ($User in $AdminUsers) {
     $LocalUser = Get-LocalUser -Name $User -ErrorAction SilentlyContinue
     $DomainUser = Get-ADUser -Filter { SamAccountName -eq $User } -ErrorAction SilentlyContinue
-    $NewPassword = Generate-Password
+    $NewPassword = New-Password
     
     if ($LocalUser) {    
         Set-LocalUser -Name $User -Password (ConvertTo-SecureString $NewPassword -AsPlainText -Force) | Out-Null
@@ -44,7 +44,7 @@ foreach ($User in $AdminUsers) {
 foreach ($User in $NormalUsers) {
     $LocalUser = Get-LocalUser -Name $User -ErrorAction SilentlyContinue
     $DomainUser = Get-ADUser -Filter { SamAccountName -eq $User } -ErrorAction SilentlyContinue
-    $NewPassword = Generate-Password
+    $NewPassword = New-Password
     
     if ($LocalUser) {    
         Set-LocalUser -Name $User -Password (ConvertTo-SecureString $NewPassword -AsPlainText -Force) | Out-Null
