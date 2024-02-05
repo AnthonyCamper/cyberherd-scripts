@@ -1,3 +1,3 @@
-wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy32
-chmod +x pspy32
-./pspy32
+wget https://github.com/DominicBreuker/pspy/releases/download/v1.2.1/pspy64
+chmod +x pspy64
+./pspy64

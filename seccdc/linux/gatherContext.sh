@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Define user arrays
 normalUsers=(
 lucy.nova
 xavier.blackhole
@@ -124,7 +123,6 @@ DONOTTOUCH=(
 seccdc_black
 )
 
-# Function to check if an element is in an array
 containsElement () {
   local e match="$1"
   shift
@@ -132,10 +130,8 @@ containsElement () {
   return 1
 }
 
-# Create or clear the file at the beginning
 > context.txt
 
-# System information gathering
 echo -e "[OS]\n$(cat /etc/os-release)\n" | tee -a context.txt
 echo -e "[Hostname]\n$(hostname)\n" | tee -a context.txt
 echo -e "[Admins]\n$(for g in adm sudo wheel; do getent group $g; done)\n" | tee -a context.txt
@@ -150,25 +146,21 @@ echo "############# Checking All Services in /etc/crontab"
 systemctl list-units --type=service --all | tee context.txt
 
 
-# Check for unauthorized users
 unauthorizedUsers=()
 unauthorizedAdmins=()
 for user in $(cut -d: -f1 /etc/passwd); do
   if ! containsElement "$user" "${normalUsers[@]}" && ! containsElement "$user" "${administratorGroup[@]}" && ! containsElement "$user" "${DONOTTOUCH[@]}"; then
     unauthorizedUsers+=("$user")
   fi
-  # Check if user is an admin not in the administratorGroup
   if id "$user" | grep -qE 'adm|sudo|wheel' && ! containsElement "$user" "${administratorGroup[@]}"; then
     unauthorizedAdmins+=("$user")
   fi
 done
 
-# Alert for unauthorized users
 if [ ${#unauthorizedUsers[@]} -ne 0 ]; then
   echo "ALERT: A USER HAS BEEN DETECTED THAT IS NOT AUTHORIZED:" "${unauthorizedUsers[@]}" | tee -a context.txt
 fi
 
-# Alert for unauthorized admins
 if [ ${#unauthorizedAdmins[@]} -ne 0 ]; then
   echo "ALERT: UNAUTHORIZED ADMINISTRATOR DETECTED:" "${unauthorizedAdmins[@]}" | tee -a context.txt
 fi
