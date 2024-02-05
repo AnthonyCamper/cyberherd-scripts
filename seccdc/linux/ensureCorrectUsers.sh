@@ -1,7 +1,6 @@
 #!/bin/bash
 
 while true; do
-    # Definitions
     ###################################################### SCORECHECK USER #################################################
     DONOTTOUCH=(
     seccdc_black

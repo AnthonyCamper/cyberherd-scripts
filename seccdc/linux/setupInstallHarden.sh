@@ -20,6 +20,7 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
 
     sudo apt update -y
     sudo apt upgrade -y
+    sudo apt install rsyslog -y
 
     sudo apt install git -y
 
