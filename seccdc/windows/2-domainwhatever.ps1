@@ -29,7 +29,6 @@ $DONOTTOUCH = @(
 
 $domainAdminsGroup = "Domain Admins"
 
-# Fetch all existing domain users
 $existingUsers = Get-ADUser -Filter * | Select-Object -ExpandProperty SamAccountName
 
 foreach ($user in $normalUsers) {

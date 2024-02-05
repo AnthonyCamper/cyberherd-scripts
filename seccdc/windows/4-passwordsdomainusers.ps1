@@ -4,7 +4,7 @@ $newPassword = "NewSecurePassword123!"
 
 $securePassword = ConvertTo-SecureString -AsPlainText $newPassword -Force
 
-$users = Get-ADUser -Filter 'Enabled -eq $true -and PasswordNeverExpires -eq $false' # This example filters to enabled accounts where the password does not never expire.
+$users = Get-ADUser -Filter 'Enabled -eq $true' # This example filters to enabled accounts where the password does not never expire.
 
 foreach ($user in $users) {
     try {

@@ -34,7 +34,7 @@ function UserIsAdmin {
 }
 
 $hostname = $env:COMPUTERNAME
-$outputFile = "C:\root\TEAM34_${hostname}_SSH_PASSWD.csv"
+$outputFile = "C:\TEAM34_${hostname}_SSH_PASSWD.csv"
 
 $keyDir = "C:\etc\ssh\shared_keys"
 if (-not (Test-Path -Path $keyDir)) {
@@ -44,7 +44,7 @@ if (-not (Test-Path -Path $keyDir)) {
 
 $sshKey = Join-Path $keyDir "shared_key"
 if (-not (Test-Path -Path $sshKey)) {
-    ssh-keygen -t rsa -b 4096 -f $sshKey -N ''
+    ssh-keygen -t rsa -b 4096 -f $sshKey
     Write-Host "Shared SSH key pair generated."
 } else {
     Write-Host "Shared SSH key pair already exists."
