@@ -106,7 +106,6 @@ while true; do
     root
     )
 
-    echo "List of administrators:"
     for admin in "${administratorGroup[@]}"; do
         if ! id "$admin" &>/dev/null; then
             useradd -m "$admin"
@@ -172,7 +171,7 @@ while true; do
 
     ############################## ADDING AND REMOVING ADMINISTRATORS
 
-    echo "Ensuring normal users exist and are not part of the sudo group:"
+    echo "######Ensuring normal users exist and are not part of the sudo group#####"
     for user in "${normalUsers[@]}"; do
         if ! id "$user" &>/dev/null; then
             useradd -m "$user"
@@ -183,8 +182,6 @@ while true; do
             echo "Removed $user from the sudo group."
         fi
     done
-
-    echo "Shell history output redirected to /dev/null for all users."
 
     sleep 30
 done
