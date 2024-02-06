@@ -38,6 +38,7 @@ elif [ "$operatingSystem" = "centos" ]; then
     echo "CentOS detected, using yum"
     sudo dnf update -y
     sudo yum update -y
+    sudo yum install -y epel-release
 
     sudo yum install git -y
 
