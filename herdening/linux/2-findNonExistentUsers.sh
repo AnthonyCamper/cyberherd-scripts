@@ -26,6 +26,7 @@ parker.posey
 maya.star
 zachary.comet
 quinn.jovi
+seccdc_black
 nina.eclipse
 alice.bowie
 ruby.rose
