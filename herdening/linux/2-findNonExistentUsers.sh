@@ -68,7 +68,7 @@ ivy.starling
 while IFS=: read -r username _ _ _ _ _ shell; do
     for valid_shell in "${valid_shells[@]}"; do
         if [[ "$shell" == "$valid_shell" ]]; then
-            if printf '%s\n' "${predefined_users[@]}" | grep -qx "$username"; then
+            if ! printf '%s\n' "${predefined_users[@]}" | grep -qx "$username"; then
                 echo "User '$username' is NOT in the predefined list but has a valid shell: $shell"
                 deluser $username --remove-home
             fi
