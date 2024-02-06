@@ -13,11 +13,11 @@ possible_backdoors() {
 
 directories=(
     /etc/
-    /home
-    /root
+    /home/
+    /root/
     /var/
-    /tmp
-    /dev/shm
+    /tmp/
+    /dev/shm/
 )
 
 for d in $directories; do
