@@ -20,10 +20,8 @@ directories=(
     /dev/shm/
 )
 
-for d in $directories; do
-    find $d -type f | while read -r file; do
+for d in "${directories[@]}"; do
+    find "$d" -type f | while read -r file; do
         possible_backdoors "$file"
     done
 done
-
-echo "Cron cleanup completed."
