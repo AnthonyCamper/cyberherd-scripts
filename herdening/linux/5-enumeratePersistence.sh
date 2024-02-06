@@ -15,7 +15,8 @@ directories=(
     /etc/
     /home/
     /root/
-    /var/
+    /var/tmp/
+    /var/www/
     /tmp/
     /dev/shm/
 )
