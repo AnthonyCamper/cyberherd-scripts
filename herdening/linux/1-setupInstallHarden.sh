@@ -67,14 +67,6 @@ cp -r /bin /backup/initial/bin
 ############################## BACKUP /usr/bin
 cp -r /usr/bin /backup/initial/usr/bin
 
-
-################################## INSTALL SNOOPY
-echo "Installing Snoopy Logger..."
-wget -O install-snoopy.sh https://github.com/a2o/snoopy/raw/install/install/install-snoopy.sh &&
-chmod 755 install-snoopy.sh &&
-sudo ./install-snoopy.sh stable
-rm -rf install-snoopy*
-
 echo "Setting up UFW..."
 echo "Disabling UFW temporarily for configuration..."
 sudo ufw disable
