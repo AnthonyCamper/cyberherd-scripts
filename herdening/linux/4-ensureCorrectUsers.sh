@@ -187,27 +187,7 @@ while true; do
         fi
     done
 
-    while IFS=: read -r username _ _ _ _ home _; do
-        if [ ! -d "$home" ]; then
-            continue
-        fi
-
-        if [ -f "$home/.bashrc" ]; then
-            echo 'HISTFILE=/dev/null' >> "$home/.bashrc"
-            echo 'unset HISTFILE' >> "$home/.bashrc"
-        fi
-
-        if [ -f "$home/.zshrc" ]; then
-            echo 'HISTFILE=/dev/null' >> "$home/.zshrc"
-            echo 'unset HISTFILE' >> "$home/.zshrc"
-        fi
-
-        [ -f "$home/.bashrc" ] && chown "$username" "$home/.bashrc"
-        [ -f "$home/.zshrc" ] && chown "$username" "$home/.zshrc"
-
-    done < /etc/passwd
-
     echo "Shell history output redirected to /dev/null for all users."
 
-    sleep 120
+    sleep 30
 done
