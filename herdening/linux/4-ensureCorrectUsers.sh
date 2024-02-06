@@ -118,7 +118,6 @@ while true; do
         if ! id "$admin" | grep -qw sudo; then
             usermod -aG sudo "$admin"
             echo "$admin added to sudo group."
-        else
         fi
     done
 
