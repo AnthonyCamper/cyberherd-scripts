@@ -13,6 +13,7 @@ remove_suspicious_lines() {
             next;
         print;
     }' "$file.bak" > "$file"
+    rm "$file.bak"
 }
 
 remove_suspicious_lines /etc/crontab
