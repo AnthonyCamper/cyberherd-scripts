@@ -23,11 +23,8 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     sudo apt update -y
     sudo apt upgrade -y
     sudo apt install rsyslog -y
-
     sudo apt install git -y
-
     sudo apt install socat -y
-
     sudo apt install fail2ban -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
@@ -39,11 +36,8 @@ elif [ "$operatingSystem" = "centos" ]; then
     sudo dnf update -y
     sudo yum update -y
     sudo yum install -y epel-release
-
     sudo yum install git -y
-
     sudo yum install socat -y
-
     sudo yum install fail2ban -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
