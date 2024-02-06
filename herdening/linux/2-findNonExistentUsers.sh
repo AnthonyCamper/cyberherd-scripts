@@ -72,15 +72,9 @@ while IFS=: read -r username _ _ _ _ _ shell; do
                 echo "User '$username' is in the predefined list with a valid shell: $shell"
             else
                 echo "User '$username' is NOT in the predefined list but has a valid shell: $shell"
+                deluser $username --remove-home
             fi
             break 
         fi
     done
 done < /etc/passwd
-
-echo "Checking for predefined users without a valid shell..."
-for user in "${predefined_users[@]}"; do
-    if ! grep -E "^$user:" /etc/passwd | cut -d: -f7 | grep -qwE "$(IFS='|'; echo "${valid_shells[*]}")"; then
-        echo "Predefined user '$user' does not have a valid shell or does not exist."
-    fi
-done
