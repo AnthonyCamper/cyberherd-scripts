@@ -13,6 +13,9 @@ while true; do
     valid_shells=(/bin/bash /bin/sh /usr/bin/zsh /usr/bin/fish)
 
     predefined_users=(
+    $1
+    $2
+    $3
     elara.boss
     sarah.lee
     lisa.brown
