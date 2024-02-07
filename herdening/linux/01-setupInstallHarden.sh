@@ -42,6 +42,9 @@ elif [ "$operatingSystem" = "centos" ]; then
     sudo yum install git -y
     sudo yum install socat -y
     sudo yum install fail2ban -y
+    sudo yum install zip -y
+    sudo yum install net-tools -y
+    sudo yum install htop -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
 
