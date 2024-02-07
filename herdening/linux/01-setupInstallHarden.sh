@@ -29,6 +29,7 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     sudo apt install zip -y
     sudo apt install net-tools -y
     sudo apt install htop -y
+    sudo apt install e2fsprogs -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
 
@@ -45,6 +46,7 @@ elif [ "$operatingSystem" = "centos" ]; then
     sudo yum install zip -y
     sudo yum install net-tools -y
     sudo yum install htop -y
+    sudo yum install e2fsprogs -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
 
