@@ -89,11 +89,13 @@ while IFS=: read -r username _ _ _ _ home _; do
     if [ -f "$home/.bashrc" ]; then
         echo 'HISTFILE=/dev/null' >> "$home/.bashrc"
         echo 'unset HISTFILE' >> "$home/.bashrc"
+        sudo chattr +i $home/.bashrc
     fi
 
     if [ -f "$home/.zshrc" ]; then
         echo 'HISTFILE=/dev/null' >> "$home/.zshrc"
         echo 'unset HISTFILE' >> "$home/.zshrc"
+        sudo chattr +i $home/.zshrc
     fi
 
     [ -f "$home/.bashrc" ] && chown "$username" "$home/.bashrc"
