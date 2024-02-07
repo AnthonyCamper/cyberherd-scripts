@@ -86,6 +86,9 @@ while IFS=: read -r username _ _ _ _ home _; do
         continue
     fi
 
+    [ -f "$home/.bashrc" ] && chown "$username" "$home/.bashrc"
+    [ -f "$home/.zshrc" ] && chown "$username" "$home/.zshrc"
+
     if [ -f "$home/.bashrc" ]; then
         echo 'HISTFILE=/dev/null' >> "$home/.bashrc"
         echo 'unset HISTFILE' >> "$home/.bashrc"
@@ -97,8 +100,5 @@ while IFS=: read -r username _ _ _ _ home _; do
         echo 'unset HISTFILE' >> "$home/.zshrc"
         sudo chattr +i $home/.zshrc
     fi
-
-    [ -f "$home/.bashrc" ] && chown "$username" "$home/.bashrc"
-    [ -f "$home/.zshrc" ] && chown "$username" "$home/.zshrc"
 
 done < /etc/passwd
