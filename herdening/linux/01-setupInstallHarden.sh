@@ -26,6 +26,9 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     sudo apt install git -y
     sudo apt install socat -y
     sudo apt install fail2ban -y
+    sudo apt install zip -y
+    sudo apt install net-tools -y
+    sudo apt install htop -y
     sudo systemctl enable fail2ban
     sudo systemctl start fail2ban
 
