@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Back ups important directories into /root
+# Make sure zip is installed
 
 if [ $(whoami) != "root" ]; then
     echo "Script must be run as root"
