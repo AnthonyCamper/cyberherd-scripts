@@ -7,6 +7,26 @@ if [ $(whoami) != "root" ]; then
     exit 1
 fi
 
+if [ "$#" -lt 1 ]; then
+    echo "Usage: bash 01-setupInstallHarden.sh <port1> <port2> ..."
+    echo "Please specify at least one port."
+    exit 1
+fi
+
+echo "Ports to be allowed through UFW:"
+for port in "$@"; do
+    echo "- $port"
+done
+
+read -r -p "Do you want to proceed with the above ports? (y/n): " response
+if [[ "$response" =~ ^[Yy]$ ]]; then
+    echo "Proceeding with the setup..."
+else
+    echo "Aborting."
+    exit 0
+fi
+
+
 id_like_line=$(grep '^ID=' /etc/os-release)
 
 operatingSystem=$(echo $id_like_line | cut -d'=' -f2 | tr -d '"')
