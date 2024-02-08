@@ -10,4 +10,4 @@ while true; do
         fi
     done
     sleep 10
-done &
+done
