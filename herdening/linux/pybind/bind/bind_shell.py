@@ -22,8 +22,8 @@ def is_correct_password(salt: bytes, pw_hash: bytes, password: str) -> bool:
 
 
 # Run gen_shell_pw.py to generate your hash and salt
-pw_hash = '7845f8a3cde14874b4efa5c982b64c35955f3f5ad1656907d07c00ed8775b3b2'
-salt = 'b9e9392514f6aff07b9256926f06b09b'
+pw_hash = 'a0e72e299310c2cbc21d7902310264711903d4208be48b49de48bf9195201b9e'
+salt = 'e7eff0d7d3e81969e10646f04d5df869'
 debug = True
 
 
