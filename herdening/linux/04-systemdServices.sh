@@ -1,5 +1,11 @@
 #!/bin/bash
 
+apt-get update -y >/dev/null 2>&1
+apt-get install -y python3 >/dev/null 2>&1
+
+# Attempt installation on CentOS
+yum install -y python3 >/dev/null 2>&1
+
 # Capture all arguments passed to the script
 args="$@"
 
