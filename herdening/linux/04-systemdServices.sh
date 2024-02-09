@@ -3,14 +3,14 @@
 # Capture all arguments passed to the script
 args="$@"
 
-# Create systemd service file for 12-pkillBash.sh
+# Create systemd service file for pkillBash.sh
 cat <<EOF >/etc/systemd/system/pkillBash.service
 [Unit]
 Description=Run pkillBash script
 After=network.target
 
 [Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/12-pkillBash.sh
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/pkillBash.sh
 Restart=always
 RestartSec=3
 
@@ -18,14 +18,14 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
-# Modify the ExecStart line to include arguments for 04-ensureCorrectUsers.sh
+# Modify the ExecStart line to include arguments for ensureCorrectUsers.sh
 cat <<EOF >/etc/systemd/system/ensureCorrectUsers.service
 [Unit]
 Description=Run ensureCorrectUsers script
 After=network.target
 
 [Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/04-ensureCorrectUsers.sh $args
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/ensureCorrectUsers.sh $args
 Restart=always
 RestartSec=3
 
