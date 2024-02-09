@@ -10,7 +10,7 @@ $LocalUsers=@()
 $DomainUsers=@()
 
 function New-Password {
-    $PasswordLength = 23
+    $PasswordLength = 12
     $PasswordChars = "abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789@#$%&!?:*-+="
     $Password = ""
     For ($i=0; $i -lt $PasswordLength; $i++) {
