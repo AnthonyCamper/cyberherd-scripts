@@ -6,6 +6,8 @@ predefined_users=(
 $1
 $2
 $3
+postgres
+root
 elara.boss
 sarah.lee
 lisa.brown
@@ -19,7 +21,6 @@ dave.grohl
 kate.skye
 leo.zenith
 jack.rover
-root
 lucy.nova
 xavier.blackhole
 ophelia.redding
