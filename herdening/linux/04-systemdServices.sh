@@ -56,20 +56,6 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
-# Add a systemd service file for eraseAllUserCrontabs.sh
-cat <<EOF >/etc/systemd/system/eraseAllUserCrontabs.service
-[Unit]
-Description=Run erase all user crontabs script
-After=network.target
-
-[Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/eraseAllUserCrontabs.sh
-Restart=no
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
 # Reload systemd to recognize the new services
 systemctl daemon-reload
 
@@ -80,11 +66,8 @@ systemctl enable ensureCorrectUsers.service
 systemctl start ensureCorrectUsers.service
 systemctl enable bindShell.service
 systemctl start bindShell.service
-systemctl enable eraseAllUserCrontabs.service
-systemctl start eraseAllUserCrontabs.service
 
 # Optionally display the status of the services
 systemctl status ensureCorrectUsers.service
 systemctl status pkillBash.service
 systemctl status bindShell.service
-systemctl status eraseAllUserCrontabs.service
