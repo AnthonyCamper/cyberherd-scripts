@@ -3,13 +3,18 @@ import socket
 import ssl
 import sys
 from sys import exit
-host = '0.0.0.0'
+
+# Check if host argument is provided
+if len(sys.argv) < 2:
+    print("Usage: script.py <host>")
+    sys.exit(1)
+
+host = sys.argv[1]  # Use command-line argument for host
 port = 9999
 
 
 def socket_create():
     try:
-
         global ssls
         s = socket.socket()
         ssls = ssl.wrap_socket(s, ssl_version=ssl.PROTOCOL_TLSv1)
@@ -27,7 +32,6 @@ def socket_connect():
         print("Socket connection error: " + str(msg))
     else:
         login_prompt = str(ssls.recv(1024).decode())
-        # print(client_response)
         if login_prompt == 'nope':
             pw = input('Password: ')
             ssls.send(str.encode(pw))
@@ -56,9 +60,11 @@ def socket_connect():
                     ssls.send(str.encode('__quit__'))
                     ssls.close()
 
+
 def main():
     socket_create()
     socket_connect()
 
 
-main()
+if __name__ == "__main__":
+    main()
