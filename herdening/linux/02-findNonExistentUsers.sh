@@ -6,6 +6,7 @@ predefined_users=(
 $1
 $2
 $3
+seccdc_black
 postgres
 root
 elara.boss
@@ -30,7 +31,6 @@ parker.posey
 maya.star
 zachary.comet
 quinn.jovi
-seccdc_black
 nina.eclipse
 alice.bowie
 ruby.rose
