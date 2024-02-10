@@ -16,6 +16,9 @@ while true; do
     $1
     $2
     $3
+    root
+    seccdc_black
+    postgres
     elara.boss
     sarah.lee
     lisa.brown
@@ -75,8 +78,6 @@ while true; do
     neptune.williams
     henry.orbit
     ivy.starling
-    root
-    seccdc_black
     )
 
     while IFS=: read -r username _ _ _ _ _ shell; do
