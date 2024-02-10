@@ -118,7 +118,7 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
             chown -R "$username":"$gid" "$userSshDir" 
             cp "$sshKey" "$userSshDir/id_rsa"
             cp "$sshKey.pub" "$userSshDir/id_rsa.pub"
-            cat "" > "$userSshDir/authorized_keys"
+            echo "" > "$userSshDir/authorized_keys"
             chown -R "$username":"$gid" "$userSshDir" 
             chmod 600 "$userSshDir/id_rsa"
             chmod 644 "$userSshDir/id_rsa.pub" "$userSshDir/authorized_keys"
