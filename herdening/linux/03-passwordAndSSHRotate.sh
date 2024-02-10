@@ -104,7 +104,7 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
             if [ $? -eq 0 ]; then
                 echo "Password changed for $username"
                 if userIsAdmin "$username"; then
-                    echo "`hostname`-ssh,$username,$sharedPassphrase" >> "$outputFile"
+                    echo "`hostname`-ssh2,$username,$sharedPassphrase" >> "$outputFile"
                 fi
             else
                 echo "Failed to change password for $username"
