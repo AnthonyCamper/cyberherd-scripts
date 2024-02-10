@@ -1,0 +1,128 @@
+
+global_vars:
+  - name: "IP"
+    type: "shell"
+    params:
+      cmd: "ip a | grep -q tun0 && hostname -I | awk '{print $(NF-1)}' || hostname -I | awk '{print $1}'"
+
+  - name: "ssh_key"
+    type: "shell"
+    params:
+      cmd: "cat /home/kali/.ssh/id_rsa.pub"
+
+matches:
+
+# WINDOWS HARDENING
+
+  - trigger: ":pshell"
+    replace: $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri 'https://github.com/PowerShell/PowerShell/releases/download/v7.4.1/PowerShell-7.4.1-win-x64.msi' -OutFile 'PowerShellInstaller.msi'; Start-Process -Wait -FilePath 'msiexec.exe' -ArgumentList '/i', 'PowerShellInstaller.msi'
+
+  - trigger: ":defend"
+    replace: Set-MpPreference -DisableRealtimeMonitoring $false; Set-MpPreference -DisableBehaviorMonitoring $false; Set-MpPreference -DisableBlockAtFirstSeen $false; Set-MpPreference -DisableIOAVProtection $false; Set-MpPreference -DisablePrivacyMode $false; Set-MpPreference -SignatureUpdateInterval 0; if (-not (Test-Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet')) { New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet' -Force }; Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows Defender\Spynet' -Name 'SpynetReporting' -Value 2
+
+  - trigger: ":avira"
+    replace: New-Item -ItemType Directory -Path 'C:\Temp\' -Force; Invoke-WebRequest -Uri 'https://package.avira.com/download/spotlight-windows-bootstrapper/avira_en_sptl1_9dca5a3d7d8f4fdf__pavwws-spotlight-release.exe' -OutFile 'C:\Temp\startup.exe' ; Start-Process -FilePath 'C:\Temp\startup.exe' -Wait
+
+  - trigger: ":sysint"
+    replace: New-Item -ItemType Directory -Path 'C:\tools\' -Force ; $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri 'https://download.sysinternals.com/files/SysinternalsSuite.zip' -OutFile 'C:\tools\SysinternalsSuite.zip' ; Expand-Archive -Path 'C:\tools\SysinternalsSuite.zip' -DestinationPath 'C:\tools\SysinternalsSuite' -Force ; Remove-Item 'C:\tools\SysinternalsSuite.zip' ; Start-Process -FilePath 'C:\tools\SysinternalsSuite\procexp64.exe' ; Start-Process -FilePath 'C:\tools\SysinternalsSuite\tcpview64.exe'
+
+  - trigger: ":scripts"
+    replace: $url = "https://github.com/gerbsec/cyberherd-scripts/archive/refs/heads/main.zip"; $zipPath = "C:\cyberherd-scripts-main.zip"; $extractPath = "C:\tools"; if (-not (Test-Path $extractPath)) { New-Item -Path $extractPath -ItemType Directory }; $ProgressPreference = 'SilentlyContinue'; Invoke-WebRequest -Uri $url -OutFile $zipPath; Expand-Archive -Path $zipPath -DestinationPath $extractPath; Remove-Item -Path $zipPath; Set-Location -Path "$extractPath\cyberherd-scripts-main\herdening\windows"
+
+  - trigger: ":firewall"
+    replace: Set-NetFirewallProfile -Profile Domain,Public,Private -Enabled True
+  
+  - trigger: ":firewallall"
+    replace: New-NetFirewallRule -DisplayName "Deny All Except SSH and RDP" -Direction Inbound -LocalPort 1-21,23,24-65535 -Action Block -Profile Any -Protocol TCP; New-NetFirewallRule -DisplayName "Allow SSH and RDP" -Direction Inbound -LocalPort 22,3389 -Action Allow -Profile Any -Protocol TCP
+
+  - trigger: ":localadmin"
+    replace: Get-LocalGroupMember -Group "Administrators" | Select-Object Name
+
+  - trigger: ":chuserpass"
+    replace: needs to be fixed
+
+  - trigger: ":chuserpass"
+    replace: Get-LocalUser | Select-Object Name
+
+  - trigger: ":localuser"
+    replace: Get-LocalUser | Select-Object Name
+  
+  - trigger: ":notepad"
+    replace: Invoke-WebRequest -Uri 'https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v8.6.2/npp.8.6.2.Installer.x64.exe' -OutFile "$env:TEMP\npp_installer.exe" -UseBasicParsing; Start-Process -FilePath "$env:TEMP\npp_installer.exe" -Wait
+
+
+  - trigger: ":sysmon"
+    replace: Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/SwiftOnSecurity/sysmon-config/master/sysmonconfig-export.xml' -OutFile 'C:\tools\SysinternalsSuite\sysmonconfig-export.xml' ; Start-Process -FilePath 'C:\tools\SysinternalsSuite\sysmon.exe' -ArgumentList '/accepteula /i C:\tools\SysinternalsSuite\sysmonconfig-export.xml' -Wait
+
+  - trigger: ":cmdlog"
+    replace: New-Item -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell' -Name ScriptBlockLogging -Force; Set-ItemProperty -Path 'HKLM:\SOFTWARE\Policies\Microsoft\Windows\PowerShell\ScriptBlockLogging' -Name EnableScriptBlockLogging -Value 1
+
+  - trigger: ":DCfirewall"
+    replace: |
+      New-NetFirewallRule -DisplayName "Allow DNS" -Direction Inbound -Protocol TCP -LocalPort 53
+      New-NetFirewallRule -DisplayName "Allow DNS UDP" -Direction Inbound -Protocol UDP -LocalPort 53
+      New-NetFirewallRule -DisplayName "Allow Kerberos" -Direction Inbound -Protocol TCP -LocalPort 88
+      New-NetFirewallRule -DisplayName "Allow Kerberos UDP" -Direction Inbound -Protocol UDP -LocalPort 88
+      New-NetFirewallRule -DisplayName "Allow W32Time" -Direction Inbound -Protocol UDP -LocalPort 123
+      New-NetFirewallRule -DisplayName "Allow RPC Endpoint Mapper" -Direction Inbound -Protocol TCP -LocalPort 135
+      New-NetFirewallRule -DisplayName "Allow NetBIOS" -Direction Inbound -Protocol UDP -LocalPort 137,138
+      New-NetFirewallRule -DisplayName "Allow NetBIOS" -Direction Inbound -Protocol TCP -LocalPort 139
+      New-NetFirewallRule -DisplayName "Allow LDAP" -Direction Inbound -Protocol TCP -LocalPort 389
+      New-NetFirewallRule -DisplayName "Allow LDAP UDP" -Direction Inbound -Protocol UDP -LocalPort 389
+      New-NetFirewallRule -DisplayName "Allow SMB" -Direction Inbound -Protocol TCP -LocalPort 445
+      New-NetFirewallRule -DisplayName "Allow Kerberos password change" -Direction Inbound -Protocol TCP -LocalPort 464
+      New-NetFirewallRule -DisplayName "Allow Kerberos password change UDP" -Direction Inbound -Protocol UDP -LocalPort 464
+      New-NetFirewallRule -DisplayName "Allow LDAP SSL" -Direction Inbound -Protocol TCP -LocalPort 636
+      New-NetFirewallRule -DisplayName "Allow LDAP Global Catalog" -Direction Inbound -Protocol TCP -LocalPort 3268
+      New-NetFirewallRule -DisplayName "Allow LDAP GC SSL" -Direction Inbound -Protocol TCP -LocalPort 3269
+      New-NetFirewallRule -DisplayName "Allow RPC Ephemeral Ports" -Direction Inbound -Protocol TCP -LocalPort 49152-65535
+      New-NetFirewallRule -DisplayName "Allow SSH" -Direction Inbound -Protocol TCP -LocalPort 22
+      New-NetFirewallRule -DisplayName "Allow RDP" -Direction Inbound -Protocol TCP -LocalPort 3389
+
+      Get-NetFirewallRule | Where-Object {$_.DisplayName -notlike "Allow DNS" -and $_.DisplayName -notlike "Allow DNS UDP" -and $_.DisplayName -notlike "Allow Kerberos" -and $_.DisplayName -notlike "Allow Kerberos UDP" -and $_.DisplayName -notlike "Allow W32Time" -and $_.DisplayName -notlike "Allow RPC Endpoint Mapper" -and $_.DisplayName -notlike "Allow NetBIOS" -and $_.DisplayName -notlike "Allow NetBIOS" -and $_.DisplayName -notlike "Allow LDAP" -and $_.DisplayName -notlike "Allow LDAP UDP" -and $_.DisplayName -notlike "Allow SMB" -and $_.DisplayName -notlike "Allow Kerberos password change" -and $_.DisplayName -notlike "Allow Kerberos password change UDP" -and $_.DisplayName -notlike "Allow LDAP SSL" -and $_.DisplayName -notlike "Allow LDAP Global Catalog" -and $_.DisplayName -notlike "Allow LDAP GC SSL" -and $_.DisplayName -notlike "Allow RPC Ephemeral Ports" -and $_.DisplayName -notlike "Allow SSH" -and $_.DisplayName -notlike "Allow RDP"} | Remove-NetFirewallRule
+
+  - trigger: ":pcastle"
+    replace: Invoke-WebRequest -Uri 'https://github.com/vletoux/pingcastle/releases/download/3.0.0.4/PingCastle_3.0.0.4.zip' -OutFile 'PingCastle_3.0.0.4.zip'; Expand-Archive -Path 'PingCastle_3.0.0.4.zip' -DestinationPath 'pingcastle'; Remove-Item 'PingCastle_3.0.0.4.zip'
+
+  - trigger: ":auditservice"
+    replace: Get-Service | Where-Object { $_.Status -eq 'Running' -and $_.DisplayName -match 'Network' } | Select-Object DisplayName, Status
+
+  - trigger: ":killsmbv1"
+    replace: Set-SmbServerConfiguration -EnableSMB1Protocol $false
+
+  - trigger: ":smbsigning"
+    replace: Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "RequireSecuritySignature" -Value 1
+
+  - trigger: ":smbexec"
+    replace: Set-ItemProperty -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name "EnableLinkedConnections" -Value 0
+
+  - trigger: ":killrc4"
+    replace: $encryptionType = 0x18; Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\Parameters" -Name "SupportedEncryptionTypes" -Value $encryptionType; gpupdate /force
+
+  - trigger: ":killipv6"
+    replace: Get-NetAdapter | ForEach-Object { Disable-NetAdapterBinding -InterfaceAlias $_.Name -ComponentID ms_tcpip6 -Confirm:$false }; Write-Host "IPv6 has been disabled on all network interfaces."
+
+  - trigger: ":llmnr"
+    replace: New-Item -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Force; Set-ItemProperty -Path "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Name "EnableMulticast" -Value 0
+
+  - trigger: ":killwinrm"
+    replace: Disable-PSRemoting -Force
+
+  - trigger: ":ntlmv2"
+    replace: Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "LmCompatibilityLevel" -Value 5
+
+  - trigger: ":auditsys"
+    replace: Get-ChildItem -Path "$env:SYSTEMROOT\SYSVOL\sysvol" -Recurse -Filter "*.[xml|xml]" | ForEach-Object { Select-String -Path $_.FullName -Pattern "<Name>.*cpassword.*<\/Name>" -Context 0, 2 }
+
+  - trigger: ":sysvolfix"
+    replace: (Get-ChildItem -Path "$env:SYSTEMROOT\SYSVOL\sysvol" -Recurse -Filter "*.[xml|xml]").FullName | ForEach-Object { Set-Content -Path $_ -Value ((Get-Content $_ -Raw) -replace '<Name>.*cpassword.*<\/Name>', '<Name></Name>') -Force }
+
+
+  - trigger: ":printspooler"
+    replace: New-Item -Path "HKLM:\SYSTEM\CurrentControlSet\Services\PrintSpooler" -Force; Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\PrintSpooler" -Name "Start" -Value 4; Stop-Service -Name Spooler -Force; Start-Service -Name Spooler
+
+  - trigger: ":eternalblue"
+    replace: (Get-HotFix -Description "Security Update" | Where-Object {$_.HotFixID -like "KB401*"}).Count -gt 0
+
+
+
