@@ -1,3 +1,0 @@
-# CPP Cyber Blue Team Things
-
-uh
