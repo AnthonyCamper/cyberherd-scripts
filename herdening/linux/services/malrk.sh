@@ -6,23 +6,32 @@ if [ "$(id -u)" -ne 0 ]; then
   exit 1
 fi
 
-#Using rkhunter alone does not guarantee that a system is not compromised. Running additional tests, such as chkrootkit, is recommended.
+id_like_line=$(grep '^ID=' /etc/os-release)
+
+operatingSystem=$(echo $id_like_line | cut -d'=' -f2 | tr -d '"')
+
+if [ -z "$operatingSystem" ]; then
+    echo "The ID_LIKE line was not found or is empty."
+else
+    echo "Operating System base: $operatingSystem"
+fi
 
 #Install dependencies
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt"
-    sudo apt install rkhunter -y
+    sudo apt install debsums -y
+    sudo apt install rkhunter -y 
     sudo apt install chkrootkit -y
-
 
 elif [ "$operatingSystem" = "centos" ]; then
     echo "CentOS detected, using yum"
-    #All files required for installation of RKHunter are contained in the EPEL repository.
-    sudo yum install epel-release -y
-    rkhunter --update
+    sudo yum install epel-release -y #All files required for installation of RKHunter are contained in the EPEL repository.
+    sudo yum install rkhunter -y
 fi
 
 #rkhunter
+# You have to config rkhunter.conf in order to use
+# /etc/rkhunter.conf
 
 
 #chkrootkit
