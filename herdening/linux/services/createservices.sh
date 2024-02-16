@@ -24,6 +24,20 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
+cat <<EOF >/etc/systemd/system/suid.service
+[Unit]
+Description=Run ensureCorrectUsers script
+After=network.target
+
+[Service]
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/suid.sh
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # Modify the ExecStart line to include arguments for ensureCorrectUsers.sh
 cat <<EOF >/etc/systemd/system/ensureCorrectUsers.service
 [Unit]
