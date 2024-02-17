@@ -30,9 +30,11 @@ elif [ "$operatingSystem" = "centos" ]; then
 fi
 
 #rkhunter
-# You have to config rkhunter.conf in order to use
+# You have to config rkhunter.conf in order to use 
 # /etc/rkhunter.conf
+# rkhunter --update
 
+rkhunter --check --skip-keypress | grep 'Warning'
 
 #chkrootkit
 
