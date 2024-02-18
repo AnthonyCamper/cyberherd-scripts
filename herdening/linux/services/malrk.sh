@@ -27,9 +27,9 @@ elif [ "$operatingSystem" = "centos" ]; then
     echo "CentOS detected, using yum"
 
 elif [ "$operatingSystem" = "fedora" ]; then
-    echo "CentOS detected, using "
+    echo "Fedora detected, using dnf"
 
 elif [ "$operatingSystem" = "openbsd" ]; then
-    echo "OpenBSD detected, using "
+    echo "OpenBSD detected, using pdk_add"
 
 fi
