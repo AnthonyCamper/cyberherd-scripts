@@ -31,12 +31,18 @@ fi
 
 #rkhunter
 # You have to config rkhunter.conf in order to use 
-# /etc/rkhunter.conf
-# rkhunter --update
+sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
+sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
+sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
 
+# Update local rkhunter database
+rkhunter --update
+
+# Run rkhunter rootkit checks
 rkhunter --check --skip-keypress | grep 'Warning'
 
-#chkrootkit
+# It is recommended to also include a chkrootkit check after rkhunter as the latter is unable to identify everything
+# chkrootkit
 
 
 #debsums
