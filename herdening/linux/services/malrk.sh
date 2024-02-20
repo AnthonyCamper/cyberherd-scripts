@@ -16,30 +16,27 @@ else
     echo "Operating System base: $operatingSystem"
 fi
 
+echo "This may take a while to run..."
+
 #Install dependencies
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt"
     sudo apt install debsums -y
-    sudo apt install rkhunter -y 
-    sudo apt install chkrootkit -y
+    echo "The following binaries may be malicious:"
+    sudo debsums -ac 2>&1 | grep -v missing
+
+    echo "Scanning for known potential Root Kits:"
+    
+    
+    echo "Check /var/log/rkhunter.log for saved output..."
 
 elif [ "$operatingSystem" = "centos" ]; then
     echo "CentOS detected, using yum"
-    sudo yum install epel-release -y #All files required for installation of RKHunter are contained in the EPEL repository.
-    sudo yum install rkhunter -y
+
+elif [ "$operatingSystem" = "fedora" ]; then
+    echo "Fedora detected, using dnf"
+
+elif [ "$operatingSystem" = "openbsd" ]; then
+    echo "OpenBSD detected, using pdk_add"
+
 fi
-
-#rkhunter
-# You have to config rkhunter.conf in order to use 
-# /etc/rkhunter.conf
-# rkhunter --update
-
-rkhunter --check --skip-keypress | grep 'Warning'
-
-#chkrootkit
-
-
-#debsums
-
-
-#clamav
