@@ -40,6 +40,7 @@ set_av() {
     chkrootkit
     freshclam
     clamscan -ir --exclude-dir=^/sys --exclude-dir=^/dev --exclude-dir=^/proc / &
+    sudo systemctl start clamav-freshclam
     }
 
 disable_compilers() {

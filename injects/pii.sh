@@ -1,11 +1,13 @@
-#!/bin/sh
+#!/bin/bash
 
-rootdir="/home/"
+# Define the paths to search in
+search_paths=("/etc" "/home" "/var" "/root") # Array of paths
 
-ssn_pattern='[0-9]\{3\}-[0-9]\{2\}-[0-9]\{4\}'
+# Loop through each path and perform the searches
+for path in "${search_paths[@]}"; do
+    echo "Searching in $path for SSNs..."
+    grep -rE "[0-9]{3}-[0-9]{2}-[0-9]{4}" "$path"
 
-
-find "$rootdir" -type f \( -name "*.txt" -o -name "*.csv" \) -exec sh -c '
-    file="$1"
-    grep -Hn "$2" "$file" | while read -r line; do echo "$file:SSN:$line"; done
-' sh '{}' "$ssn_pattern" \;
+    echo "Searching in $path for credit card numbers..."
+    grep -rE "([0-9]{4}[- ]){3}[0-9]{4}" "$path"
+done
