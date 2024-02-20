@@ -21,12 +21,14 @@ echo "This may take a while to run..."
 #Install dependencies
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt"
+    sudo apt install rkhunter -y
     sudo apt install debsums -y
+    
     echo "The following binaries may be malicious:"
     sudo debsums -ac 2>&1 | grep -v missing
 
     echo "Scanning for known potential Root Kits:"
-    
+    rkhunter --check --disable all --enable rootkits
     
     echo "Check /var/log/rkhunter.log for saved output..."
 
