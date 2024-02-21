@@ -52,9 +52,23 @@ elif [ "$operatingSystem" = "centos" ]; then
         sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
     fi
 
+    if [ ! -f /root/chkrootkit/chkrootkit ]; then
+        echo "Installing chkrootkit..."
+        wget -c https://src.fedoraproject.org/repo/pkgs/chkrootkit/chkrootkit-0.55.tar.gz/sha512/742dca90a761ecff149d8704cb3a252adfe8f9d5e15dd060e9db4d5f6dcd3820933ae13cbee99ea5a8c6144932cf97c0616a177af3ba5a1726b51bb304e7d63e/chkrootkit-0.55.tar.gz
+        tar -zxvf chkrootkit-0.55.tar.gz
+        mkdir /root/chkrootkit
+        mv chkrootkit-0.55/* /root/chkrootkit
+        cd /root/chkrootkit
+        make sense
+        cd -
+    fi
+
     echo -e "\n\nRKH Scanning for known potential Root Kits:"
     rkhunter --update -q
     rkhunter --check --sk --rwo
+
+    echo -e "\n\nCHK Scanning for known potential Root Kits:"
+    chkrootkit -q | grep INFECTED
     
 elif [ "$operatingSystem" = "fedora" ]; then
     echo "$operatingSystem detected, using dnf..."
