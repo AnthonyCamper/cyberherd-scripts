@@ -65,7 +65,8 @@ elif [ "$operatingSystem" = "centos" ]; then
 
     echo -e "\n\nRKH Scanning for known potential Root Kits:"
     rkhunter --update -q
-    rkhunter --check --sk --rwo
+    rkhunter --check --sk -q
+    cat /var/log/rkhunter/rkhunter.log | grep Warning
 
     echo -e "\n\nCHK Scanning for known potential Root Kits:"
     /root/chkrootkit/chkrootkit -q | grep INFECTED
