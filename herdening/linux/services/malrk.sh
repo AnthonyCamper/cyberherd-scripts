@@ -68,7 +68,7 @@ elif [ "$operatingSystem" = "centos" ]; then
     rkhunter --check --sk --rwo
 
     echo -e "\n\nCHK Scanning for known potential Root Kits:"
-    chkrootkit -q | grep INFECTED
+    /root/chkrootkit/chkrootkit -q | grep INFECTED
     
 elif [ "$operatingSystem" = "fedora" ]; then
     echo "$operatingSystem detected, using dnf..."
