@@ -17,30 +17,30 @@ else
 fi
 
 echo "This may take a while to run..."
+echo "Installing Dependencies please wait..."
 
-#Install dependencies
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
-    echo "$operatingSystem detected, using apt"
-    sudo apt install rkhunter -y --fix-missing
-    sudo apt install chkrootkit -y
-    sudo apt install debsums -y
+    echo "$operatingSystem detected, using apt..."
+    sudo apt install rkhunter -y --fix-missing -qq
+    sudo apt install chkrootkit -y -qq
+    sudo apt install debsums -y -qq
     
-    echo "The following binaries are malicious/have been tampered with:"
+    echo -e "\n\nScanning for binaries that are malicious/have been tampered with:"
     sudo debsums -ac 2>&1 | grep -v missing
 
-    echo "RKH Scanning for known potential Root Kits:"
+    echo -e "\n\nRKH Scanning for known potential Root Kits:"
     rkhunter --check --sk --rwo
 
-    echo "CHK Scanning for known potential Root Kits 2:"
+    echo -e "\n\nCHK Scanning for known potential Root Kits:"
     chkrootkit -q | grep INFECTED
     
 elif [ "$operatingSystem" = "centos" ]; then
-    echo "CentOS detected, using yum"
+    echo "$operatingSystem detected, using yum..."
 
 elif [ "$operatingSystem" = "fedora" ]; then
-    echo "Fedora detected, using dnf"
+    echo "$operatingSystem detected, using dnf..."
 
 elif [ "$operatingSystem" = "openbsd" ]; then
-    echo "OpenBSD detected, using pdk_add"
+    echo "$operatingSystem detected, using pdk_add..."
 
 fi
