@@ -25,10 +25,12 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     sudo apt install chkrootkit -y -qq
     sudo apt install debsums -y -qq
 
-    sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
-    sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
-    sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
-    
+    if grep -q 'WEB_CMD="/bin/false"' /etc/rkhunter.conf; then
+        sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
+        sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
+        sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
+    fi
+
     echo -e "\n\nScanning for binaries that are malicious/have been tampered with:"
     sudo debsums -ac 2>&1 | grep -v missing
 
