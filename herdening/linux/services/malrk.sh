@@ -21,17 +21,19 @@ echo "This may take a while to run..."
 #Install dependencies
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt"
-    sudo apt install rkhunter -y
+    sudo apt install rkhunter -y --fix-missing
+    sudo apt install chkrootkit -y
     sudo apt install debsums -y
     
-    echo "The following binaries may be malicious:"
+    echo "The following binaries are malicious/have been tampered with:"
     sudo debsums -ac 2>&1 | grep -v missing
 
-    echo "Scanning for known potential Root Kits:"
-    rkhunter --check --disable all --enable rootkits
-    
-    echo "Check /var/log/rkhunter.log for saved output..."
+    echo "RKH Scanning for known potential Root Kits:"
+    rkhunter --check --sk --rwo
 
+    echo "CHK Scanning for known potential Root Kits 2:"
+    chkrootkit -q | grep INFECTED
+    
 elif [ "$operatingSystem" = "centos" ]; then
     echo "CentOS detected, using yum"
 
