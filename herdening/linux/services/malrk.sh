@@ -17,7 +17,7 @@ else
 fi
 
 echo "This may take a while to run..."
-echo "Installing Dependencies please wait...\n\n"
+echo -e "Installing Dependencies please wait...\n\n"
 
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt..."
