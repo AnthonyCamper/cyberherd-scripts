@@ -31,7 +31,7 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
         sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
     fi
 
-    echo -e "\n\nScanning for binaries that are malicious/have been tampered with:"
+    echo -e "\n\nScanning for binaries that are malicious/have been tampered with:\n--(rkhunter is false positive, ignore)--"
     sudo debsums -ac 2>&1 | grep -v missing
 
     echo -e "\n\nRKH Scanning for known potential Root Kits:"
@@ -43,7 +43,19 @@ if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     
 elif [ "$operatingSystem" = "centos" ]; then
     echo "$operatingSystem detected, using yum..."
+    sudo yum install epel-release -y -q
+    sudo yum install rkhunter -y -q
 
+    if grep -q 'WEB_CMD="/bin/false"' /etc/rkhunter.conf; then
+        sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
+        sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
+        sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
+    fi
+
+    echo -e "\n\nRKH Scanning for known potential Root Kits:"
+    rkhunter --update -q
+    rkhunter --check --sk --rwo
+    
 elif [ "$operatingSystem" = "fedora" ]; then
     echo "$operatingSystem detected, using dnf..."
 
