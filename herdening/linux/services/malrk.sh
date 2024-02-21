@@ -17,18 +17,23 @@ else
 fi
 
 echo "This may take a while to run..."
-echo "Installing Dependencies please wait..."
+echo "Installing Dependencies please wait...\n\n"
 
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt..."
     sudo apt install rkhunter -y --fix-missing -qq
     sudo apt install chkrootkit -y -qq
     sudo apt install debsums -y -qq
+
+    sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
+    sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
+    sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
     
     echo -e "\n\nScanning for binaries that are malicious/have been tampered with:"
     sudo debsums -ac 2>&1 | grep -v missing
 
     echo -e "\n\nRKH Scanning for known potential Root Kits:"
+    rkhunter --update -q
     rkhunter --check --sk --rwo
 
     echo -e "\n\nCHK Scanning for known potential Root Kits:"
