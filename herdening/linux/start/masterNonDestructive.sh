@@ -27,10 +27,6 @@ if [ $(whoami) != "root" ]; then
     exit 1
 fi
 
-
-# Define the array of desired ports
-desiredPorts=(8080 443 80)
-
 echo "Ports to be allowed through UFW:"
 for port in "${desiredPorts[@]}"; do
     echo "- $port"
@@ -101,7 +97,7 @@ sudo mkdir -p /backup/initial
 ############################## BACKUP /etc
 cp -r /etc /backup/initial/etc
 
-############################## BACKUP /etc
+############################## BACKUP /var/www
 cp -r /var/www /backup/initial/etc
 
 ############################## BACKUP /home
@@ -215,6 +211,25 @@ sudo bash ../oh-brother/init.sh
 
 # Chattr important config files (2nd to last)
 sudo chattr -i /etc/ssh/sshd_config
+
+# Harden SSH
+if service sshd status > /dev/null; then
+	# We're using root over SSH, so we enable it
+	sed -i '1s;^;PermitRootLogin yes\n;' /etc/ssh/sshd_config
+	sed -i '1s;^;PubkeyAuthentication no\n;' /etc/ssh/sshd_config
+
+	# Don't set UsePAM no for Fedora, RHEL, CentOS
+	if ! cat /etc/os-release | grep -q "REDHAT_"; then
+		sed -i '1s;^;UsePAM no\n;' /etc/ssh/sshd_config
+	fi
+
+	sed -i '1s;^;UseDNS no\n;' /etc/ssh/sshd_config
+	sed -i '1s;^;PermitEmptyPasswords no\n;' /etc/ssh/sshd_config
+	sed -i '1s;^;AddressFamily inet\n;' /etc/ssh/sshd_config
+
+	# Restart service if config is good
+	sshd -t && systemctl restart sshd
+fi
 
 # (last)
 # rename and symlink relevant binaries (rm, chattr)
