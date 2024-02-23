@@ -1,5 +1,23 @@
 #!/bin/bash
 
+##################################### IMPORTANT
+##################################### IMPORTANT
+##################################### IMPORTANT
+
+##################################### Update these values
+# update desired users, this is a list of users with login shells that we want to keep (no rbash, no changes)
+predefined_users=(
+seccdc_black
+postgres
+root
+)
+
+# Define the array of desired ports
+desiredPorts=(8080 443 80 22)
+
+# exclude these users from rbash (ie make every user that isn't these and has a login shell rbash)
+noRBash=("seccdc_black" "jack.rover" "root") # Add more usernames as needed
+
 
 # old init.sh
 # Setup by installing required programs like dependencies, git, fail2ban, and ufw, configure what is nessesary, and do some basic hardening.
@@ -9,16 +27,15 @@ if [ $(whoami) != "root" ]; then
     exit 1
 fi
 
-if [ "$#" -lt 1 ]; then
-    echo "Usage: bash 01-setupInstallHarden.sh <port1> <port2> ..."
-    echo "Please specify at least one port."
-    exit 1
-fi
+
+# Define the array of desired ports
+desiredPorts=(8080 443 80)
 
 echo "Ports to be allowed through UFW:"
-for port in "$@"; do
+for port in "${desiredPorts[@]}"; do
     echo "- $port"
 done
+
 
 read -r -p "Do you want to proceed with the above ports? (y/n): " response
 if [[ "$response" =~ ^[Yy]$ ]]; then
@@ -84,6 +101,9 @@ sudo mkdir -p /backup/initial
 ############################## BACKUP /etc
 cp -r /etc /backup/initial/etc
 
+############################## BACKUP /etc
+cp -r /var/www /backup/initial/etc
+
 ############################## BACKUP /home
 cp -r /home /backup/initial/home
 
@@ -102,7 +122,10 @@ sudo ufw --force reset
 sudo ufw default deny incoming
 sudo ufw default allow outgoing
 
-for port in "$@"; do
+
+
+# Loop through the array
+for port in "${desiredPorts[@]}"; do
     echo "Allowing port $port through UFW..."
     sudo ufw allow "$port"
 done
@@ -115,70 +138,7 @@ sudo ufw status verbose
 # Goal of this script is to find users that are unauthorized, with a login shell.
 valid_shells=(/bin/bash /bin/sh /usr/bin/zsh /usr/bin/fish)
 
-predefined_users=(
-seccdc_black
-postgres
-root
-elara.boss
-sarah.lee
-lisa.brown
-michael.davis
-emily.chen
-tom.harris
-bob.johnson
-david.kim
-rachel.patel
-dave.grohl
-kate.skye
-leo.zenith
-jack.rover
-lucy.nova
-xavier.blackhole
-ophelia.redding
-marcus.atlas
-yara.nebula
-parker.posey
-maya.star
-zachary.comet
-quinn.jovi
-nina.eclipse
-alice.bowie
-ruby.rose
-owen.mars
-bob.dylan
-samantha.stephens
-parker.jupiter
-carol.rivers
-taurus.tucker
-rachel.venus
-emily.waters
-una.veda
-ruby.starlight
-frank.zappa
-ava.stardust
-samantha.aurora
-grace.slick
-benny.spacey
-sophia.constellation
-harry.potter
-celine.cosmos
-tessa.nova
-ivy.lee
-dave.marsden
-thomas.spacestation
-kate.bush
-emma.nova
-una.moonbase
-luna.lovegood
-frank.astro
-victor.meteor
-mars.patel
-grace.luna
-wendy.starship
-neptune.williams
-henry.orbit
-ivy.starling
-)
+
 
 while IFS=: read -r username _ _ _ _ _ shell; do
     for valid_shell in "${valid_shells[@]}"; do
@@ -192,8 +152,7 @@ while IFS=: read -r username _ _ _ _ _ shell; do
     done
 done < /etc/passwd
 
-# Array of users exempt from changing to rbash
-noRBash=("seccdc_black" "jack.rover") # Add more usernames as needed
+
 
 # Function to check if a user is in the noRBash array
 is_in_noRBash() {
@@ -263,6 +222,6 @@ sudo chattr -i /etc/ssh/sshd_config
 
 # (last)
 # rename and symlink relevant binaries (rm, chattr)
-mv `which chattr` /usr/bin/shhh
+# mv `which chattr` /usr/bin/shhh # this is done by users 1
 sudo `which rm` /usr/bin/bruh
 
