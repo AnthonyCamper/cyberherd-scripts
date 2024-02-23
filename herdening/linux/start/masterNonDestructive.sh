@@ -209,9 +209,6 @@ done < /etc/passwd
 # run weem nixarmor
 sudo bash ../oh-brother/init.sh
 
-# Chattr important config files (2nd to last)
-sudo chattr -i /etc/ssh/sshd_config
-
 # Harden SSH
 if service sshd status > /dev/null; then
 	# We're using root over SSH, so we enable it
@@ -230,6 +227,37 @@ if service sshd status > /dev/null; then
 	# Restart service if config is good
 	sshd -t && systemctl restart sshd
 fi
+# Ensure the script is run as root
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 
+   exit 1
+fi
+
+# Iterate over each user's home directory
+while IFS=: read -r username _ _ _ _ home _; do
+  # Check if the home directory exists and the Bash history file is present
+  if [[ -d "$home" && -f "$home/.bash_history" ]]; then
+    echo "Clearing Bash history for user: $username"
+    # Pipe the Bash history file to /dev/null
+    cat /dev/null > "$home/.bash_history"
+  fi
+
+  # Check if the home directory exists and the Zsh history file is present
+  if [[ -d "$home" && -f "$home/.zsh_history" ]]; then
+    echo "Clearing Zsh history for user: $username"
+    # Pipe the Zsh history file to /dev/null
+    cat /dev/null > "$home/.zsh_history"
+  fi
+done < /etc/passwd
+
+echo "All user histories have been cleared."
+
+echo "All user histories have been cleared."
+
+
+# Chattr important config files (2nd to last)
+sudo chattr -i /etc/ssh/sshd_config
+
 
 # (last)
 # rename and symlink relevant binaries (rm, chattr)
