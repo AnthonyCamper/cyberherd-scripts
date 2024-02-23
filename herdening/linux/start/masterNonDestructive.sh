@@ -213,10 +213,6 @@ done < /etc/passwd
 # run weem nixarmor
 sudo bash ../oh-brother/init.sh
 
-
-
-
-
 # Chattr important config files (2nd to last)
 sudo chattr -i /etc/ssh/sshd_config
 
