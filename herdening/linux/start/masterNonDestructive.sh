@@ -13,7 +13,7 @@ root
 )
 
 # Define the array of desired ports
-desiredPorts=(8080 443 80 22)
+desiredPorts=(8080 443 80 22 53 21)
 
 # exclude these users from rbash (ie make every user that isn't these and has a login shell rbash)
 noRBash=("seccdc_black" "jack.rover" "root") # Add more usernames as needed
@@ -116,7 +116,7 @@ sudo ufw disable
 sudo ufw --force reset
 
 sudo ufw default deny incoming
-sudo ufw default allow outgoing
+sudo ufw default deny outgoing
 
 
 
@@ -262,5 +262,5 @@ sudo chattr -i /etc/ssh/sshd_config
 # (last)
 # rename and symlink relevant binaries (rm, chattr)
 # mv `which chattr` /usr/bin/shhh # this is done by users 1
-sudo `which rm` /usr/bin/bruh
+sudo mv `which rm` /usr/bin/bruh
 
