@@ -7,13 +7,14 @@
 ##################################### Update these values
 # update desired users, this is a list of users with login shells that we want to keep (no rbash, no changes)
 predefined_users=(
-seccdc_black
+admin
 postgres
 root
+seccdc_black
 )
 
 # Define the array of desired ports
-desiredPorts=(8080 443 80 22 53 21)
+desiredPorts=(8080 443 80 22 53 21 3306 3389 5432)
 
 # exclude these users from rbash (ie make every user that isn't these and has a login shell rbash)
 noRBash=("seccdc_black" "jack.rover" "root") # Add more usernames as needed
@@ -209,8 +210,7 @@ done < /etc/passwd
 # run weem nixarmor
 sudo bash ../oh-brother/init.sh
 
-# Chattr important config files (2nd to last)
-sudo chattr -i /etc/ssh/sshd_config
+
 
 # Harden SSH
 if service sshd status > /dev/null; then
@@ -230,6 +230,9 @@ if service sshd status > /dev/null; then
 	# Restart service if config is good
 	sshd -t && systemctl restart sshd
 fi
+
+# Chattr important config files (2nd to last)
+sudo chattr +i /etc/ssh/sshd_config
 
 # (last)
 # rename and symlink relevant binaries (rm, chattr)

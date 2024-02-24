@@ -1,6 +1,30 @@
 #!/bin/bash
 # This will rotate all SSH keys and passwords, logging as required. User will be prompted for the password.
-excludeUser="seccdc_black"
+excludeUser=(
+    "khanmigo"
+    "myai"
+    "tabcomplete"
+    "gpt"
+    "cortana"
+    "codewhisperer"
+    "claude"
+    "musico"
+    "chatbot"
+    "codeium"
+    "tabnine"
+    "copilot"
+    "watson"
+    "tensorflow"
+    "bard"
+    "pytorch"
+    "caffe2"
+    "midjourney"
+    "dalle"
+    "llama"
+    "theano"
+    "aiva"
+    "siri"
+)
 
 administratorGroup=(
 elara.boss
@@ -111,19 +135,19 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
                 continue
             fi
             
-        userSshDir="$home/.ssh"
-        if [[ "$shell" == *sh ]]; then
-            mkdir -p $userSshDir
-            chmod 700 "$userSshDir"
-            chown -R "$username":"$gid" "$userSshDir" 
-            cp "$sshKey" "$userSshDir/id_rsa"
-            cp "$sshKey.pub" "$userSshDir/id_rsa.pub"
-            echo "" > "$userSshDir/authorized_keys"
-            chown -R "$username":"$gid" "$userSshDir" 
-            chmod 600 "$userSshDir/id_rsa"
-            chmod 644 "$userSshDir/id_rsa.pub" "$userSshDir/authorized_keys"
-            echo "Shared SSH keys set for $username."
-        fi
+        # userSshDir="$home/.ssh"
+        # if [[ "$shell" == *sh ]]; then
+        #     mkdir -p $userSshDir
+        #     chmod 700 "$userSshDir"
+        #     chown -R "$username":"$gid" "$userSshDir" 
+        #     cp "$sshKey" "$userSshDir/id_rsa"
+        #     cp "$sshKey.pub" "$userSshDir/id_rsa.pub"
+        #     echo "" > "$userSshDir/authorized_keys"
+        #     chown -R "$username":"$gid" "$userSshDir" 
+        #     chmod 600 "$userSshDir/id_rsa"
+        #     chmod 644 "$userSshDir/id_rsa.pub" "$userSshDir/authorized_keys"
+        #     echo "Shared SSH keys set for $username."
+        # fi
         fi
     fi
 done
