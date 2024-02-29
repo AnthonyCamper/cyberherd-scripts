@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# sudo passwd seccdc_black and then set up a password for black to test it.
 ############################ NOTE: THIS SCRIPT MAKES USERS THAT SHOULD NOT BE HERE. DO NOT USE THESE LISTS FOR CCDC REFERENCE, USE THE LISTS IN CONTEXT.SH FOR REFERENCE.
 if [ $(whoami) != "root" ]; then
     echo "Script must be run as root"
