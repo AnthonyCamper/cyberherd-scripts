@@ -1,6 +1,6 @@
 #!/bin/bash
 # Goal of this script is to find users that are unauthorized, with a login shell.
-valid_shells=(/bin/bash /bin/sh /usr/bin/zsh /usr/bin/fish)
+valid_shells=(/bin/bash /bin/sh /usr/bin/zsh /usr/bin/fish /usr/bin/bash /usr/bin/sh /bin/rbash /usr/bin/rbash)
 
 # Script can take 3 arguements (ie bash deleteUnauthorizedLoginShellUsers.sh root root1 root2)
 predefined_users=(
