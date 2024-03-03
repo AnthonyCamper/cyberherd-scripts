@@ -17,27 +17,23 @@ containsElement () {
 while IFS=: read -r username _ _ _ _ home shell; do
   if containsElement "$shell" "${valid_shells[@]}" && ! containsElement "$username" "${excludeFromRBash[@]}"; then
     echo "Changing shell for $username to rbash..."
-    chsh -s /bin/rbash "$username"
+    chsh -s /bin/rbash "$username" >/dev/null
     
-    # Ensure the home directory and .shrc files are owned by the user
     chown -R "$username":"$username" "$home"
     chown "$username":"$username" "$home"/.*shrc 2>/dev/null
     
-    # Clear and reset environment variables in .shrc files
     echo 'HISTFILE=/dev/null' > "$home"/.*shrc
     echo 'unset HISTFILE' >> "$home"/.*shrc
-    echo 'PATH=/usr/local/rbin' >> "$home"/.*shrc # Change to a safe, restricted bin directory
+    echo 'PATH=/usr/local/rbin' >> "$home"/.*shrc
     echo 'export PATH' >> "$home"/.*shrc
     
     
     if command -v apk >/dev/null; then
-        echo 'export PATH=/usr/local/rbin' >> "$home"/.profile # Ensure PATH is restricted even here
+        echo 'export PATH=/usr/local/rbin' >> "$home"/.profile
     fi
 
-    # Ensure users cannot execute files from their home directory
     chmod -R go-w "$home"
-    find "$home" -type d -exec chmod go+x {} +  # Allow directory traversal but not execution    
-    # Make .shrc files immutable to prevent changes
+    find "$home" -type d -exec chmod go+x {} +
     sudo chattr +i "$home"/.*shrc 2>/dev/null
     
   fi
