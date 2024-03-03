@@ -1,32 +1,10 @@
 #!/bin/bash
 # This will rotate all SSH keys and passwords, logging as required. User will be prompted for the password.
 excludeUser=(
-    "khanmigo"
-    "myai"
-    "tabcomplete"
-    "gpt"
-    "cortana"
-    "codewhisperer"
-    "claude"
-    "musico"
-    "chatbot"
-    "codeium"
-    "tabnine"
-    "copilot"
-    "watson"
-    "tensorflow"
-    "bard"
-    "pytorch"
-    "caffe2"
-    "midjourney"
-    "dalle"
-    "llama"
-    "theano"
-    "aiva"
-    "siri"
+    "seccdc_black"
 )
 
-administratorGroup=(
+users=(
 elara.boss
 sarah.lee
 lisa.brown
@@ -88,9 +66,9 @@ henry.orbit
 ivy.starling
 )
 
-userIsAdmin() {
+userExists() {
     local e
-    for e in "${administratorGroup[@]}"; do [[ "$e" == "$1" ]] && return 0; done
+    for e in "${users[@]}"; do [[ "$e" == "$1" ]] && return 0; done
     return 1
 }
 
@@ -127,7 +105,7 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
             echo "$username:$sharedPassphrase" | chpasswd
             if [ $? -eq 0 ]; then
                 echo "Password changed for $username"
-                if userIsAdmin "$username"; then
+                if userExists "$username"; then
                     echo "`hostname`-ssh2,$username,$sharedPassphrase" >> "$outputFile"
                 fi
             else
@@ -151,5 +129,6 @@ getent passwd | while IFS=: read -r username password uid gid full home shell; d
         fi
     fi
 done
+passwd
 
-echo "Script completed. User details, except for administratorGroup, written to $outputFile."
+echo "Script completed. User details, except for users, written to $outputFile."
