@@ -26,7 +26,7 @@ EOF
 
 cat <<EOF >/etc/systemd/system/suid.service
 [Unit]
-Description=Run ensureCorrectUsers script
+Description=Run suid script
 After=network.target
 
 [Service]
