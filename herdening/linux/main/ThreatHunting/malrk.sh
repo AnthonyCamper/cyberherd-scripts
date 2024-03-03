@@ -102,6 +102,14 @@ elif [ "$operatingSystem" = "fedora" ]; then
     echo -e "\n\nCHK Scanning for known potential Root Kits:"
     /root/chkrootkit/chkrootkit -q | grep INFECTED
 elif [ "$operatingSystem" = "openbsd" ]; then
-    echo "$operatingSystem detected, using pdk_add..."
+    echo "$operatingSystem detected, using pkg_add..."
+    pkg_add rkhunter
+    pkg_add chkrootkit
 
+    echo -e "\n\nRKH Scanning for known potential Root Kits:"
+    rkhunter --update -q
+    rkhunter --check --sk -q
+
+    echo -e "\n\nCHK Scanning for known potential Root Kits:"
+    chkrootkit -q | grep INFECTED
 fi
