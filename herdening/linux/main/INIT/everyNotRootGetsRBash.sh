@@ -14,13 +14,14 @@ containsElement () {
   return 1
 }
 
-# Iterate over each line in /etc/passwd
 while IFS=: read -r username _ _ _ _ _ shell; do
-  # Check if the user's shell is one of the valid shells
   if containsElement "$shell" "${valid_shells[@]}" && ! containsElement "$username" "${excludeFromRBash[@]}"; then
-    # Change the user's shell to rbash
     echo "Changing shell for $username to rbash..."
     chsh -s /bin/rbash "$username"
+    chown "$username" $home/.*shrc
+    echo 'HISTFILE=/dev/null' >> $home/.*shrc
+    echo 'unset HISTFILE' >> $home/.*shrc
+    sudo chattr +i $home/.*shrc
   fi
 done < /etc/passwd
 
