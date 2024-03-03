@@ -39,15 +39,12 @@ while IFS=: read -r username _ _ _ _ home shell; do
   fi
 done < /etc/passwd
 
-# Create a restricted bin directory if it doesn't exist and populate it with allowed commands
 mkdir -p /usr/local/rbin
 chown root:root /usr/local/rbin
 chmod 755 /usr/local/rbin
-# Link necessary commands here, e.g., ln -s /bin/ls /usr/local/rbin/ls
 ln -s /usr/bin/whoami /usr/local/rbin/whoami
 ln -s /usr/bin/id /usr/local/rbin/id
 
-# Ensure the symbolic links are owned by root and not writable by others
 chown root:root /usr/local/rbin/whoami
 chown root:root /usr/local/rbin/id
 chmod 755 /usr/local/rbin/whoami
