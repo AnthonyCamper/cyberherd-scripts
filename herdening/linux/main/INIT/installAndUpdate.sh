@@ -34,16 +34,23 @@ remove_package() {
     fi
 }
 
+fix_missing_apt() {
+    if [ "$pkgManager" = "apt" ]; then
+        sudo apt update --fix-missing
+    fi
+}
 enable_service() {
     sudo systemctl enable "$@"
     sudo systemctl start "$@"
 }
 
+fix_missing_apt
+
 # Update system
 update_system
 
 # Install packages
-install_package rsyslog git socat fail2ban zip net-tools htop e2fsprogs epel-release uf
+install_package epel-release rsyslog git socat fail2ban zip net-tools htop e2fsprogs uf rkhunter debsums chrootkit rbash
 remove_package cron
 
 # Special handling for UFW, considering its availability
