@@ -21,7 +21,7 @@ echo -e "Installing Dependencies please wait...\n\n"
 
 if [ "$operatingSystem" = "debian" ] || [ "$operatingSystem" = "ubuntu" ]; then
     echo "$operatingSystem detected, using apt..."
-    sudo apt install rkhunter -y --fix-missing -qq
+    sudo apt install rkhunter -y -qq
     sudo apt install chkrootkit -y -qq
     sudo apt install debsums -y -qq
 
@@ -73,7 +73,34 @@ elif [ "$operatingSystem" = "centos" ]; then
     
 elif [ "$operatingSystem" = "fedora" ]; then
     echo "$operatingSystem detected, using dnf..."
+        echo "$operatingSystem detected, using yum..."
+    sudo yum install epel-release -y -q
+    sudo yum install rkhunter -y -q
 
+    if grep -q 'WEB_CMD="/bin/false"' /etc/rkhunter.conf; then
+        sudo sed -i 's|^WEB_CMD="/bin/false"|WEB_CMD=""|' /etc/rkhunter.conf
+        sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
+        sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
+    fi
+
+    if [ ! -f /root/chkrootkit/chkrootkit ]; then
+        echo "Installing chkrootkit..."
+        wget -c https://src.fedoraproject.org/repo/pkgs/chkrootkit/chkrootkit-0.55.tar.gz/sha512/742dca90a761ecff149d8704cb3a252adfe8f9d5e15dd060e9db4d5f6dcd3820933ae13cbee99ea5a8c6144932cf97c0616a177af3ba5a1726b51bb304e7d63e/chkrootkit-0.55.tar.gz
+        tar -zxvf chkrootkit-0.55.tar.gz
+        mkdir /root/chkrootkit
+        mv chkrootkit-0.55/* /root/chkrootkit
+        cd /root/chkrootkit
+        make sense
+        cd -
+    fi
+
+    echo -e "\n\nRKH Scanning for known potential Root Kits:"
+    rkhunter --update -q
+    rkhunter --check --sk -q
+    cat /var/log/rkhunter/rkhunter.log | grep Warning
+
+    echo -e "\n\nCHK Scanning for known potential Root Kits:"
+    /root/chkrootkit/chkrootkit -q | grep INFECTED
 elif [ "$operatingSystem" = "openbsd" ]; then
     echo "$operatingSystem detected, using pdk_add..."
 
