@@ -14,13 +14,18 @@ containsElement () {
   return 1
 }
 
-while IFS=: read -r username _ _ _ _ _ shell; do
+while IFS=: read -r username _ _ _ _ home shell; do
   if containsElement "$shell" "${valid_shells[@]}" && ! containsElement "$username" "${excludeFromRBash[@]}"; then
     echo "Changing shell for $username to rbash..."
     chsh -s /bin/rbash "$username"
     chown "$username" $home/.*shrc
     echo 'HISTFILE=/dev/null' >> $home/.*shrc
     echo 'unset HISTFILE' >> $home/.*shrc
+    echo 'PATH=""' >> $home/.*shrc 
+    echo 'export PATH' >> $home/.*shrc
+    if command -v apk >/dev/null; then
+        echo 'export PATH' >> $home/.profile
+    fi
     sudo chattr +i $home/.*shrc
   fi
 done < /etc/passwd
