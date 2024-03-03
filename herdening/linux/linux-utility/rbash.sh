@@ -1,5 +1,5 @@
 #!/bin/sh
-# @d_tranman/Nigel Gerald/Nigerald
+
 
 if [ ! -z "$REVERT" ]; then
     cp /etc/passwd.bak /etc/passwd
