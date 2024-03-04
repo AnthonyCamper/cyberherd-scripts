@@ -98,6 +98,20 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
+cat <<EOF >/etc/systemd/system/serviceup.service
+[Unit]
+Description=Run chattr script
+After=always
+
+[Service]
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/chattr.sh
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
 # Reload systemd to recognize the new services
 systemctl daemon-reload
 
