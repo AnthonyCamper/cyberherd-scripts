@@ -98,7 +98,7 @@ harden_php(){
 	    perl -npe 's/max_input_time\s+=\s+60/max_input_time = 30/' -i $i;
 	    perl -npe 's/memory_limit\s+=\s+-1/memory_limit = 40M/' -i $i;
 	    perl -npe 's/magic_quotes_gpc\s+=\s+On/magic_quotes_gpc = Off/' -i $i;
-	    perl -npe 's/disable_functions\s+=\s+/disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source/' -i $i;
+        perl -npe 's/disable_functions\s+=.*/disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source,eval,system,shell_exec,passthru,exec,popen,proc_open,proc_close,proc_terminate,proc_get_status,ini_set,phpinfo,show_source,symlink,link,dl,popen,curl_exec,curl_multi_exec,parse_ini_file,parse_ini_string,assert,pcntl_exec/' -i $i;
 done
 }
 
