@@ -134,6 +134,8 @@ containsElement () {
 
 echo "############# Checking CronTabs in /etc/crontab" 
 cat /etc/crontab
+for i in $(ls /home); do crontab -l -u $i 2>/dev/null;done
+crontab -l 
 #echo "############# Checking All Services in /etc/crontab" 
 #systemctl list-units --type=service --all
 
