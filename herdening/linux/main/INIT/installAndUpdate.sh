@@ -55,7 +55,7 @@ update_system
 
 # Install packages
 # Added iptables-persistent and iptables-services to the package list
-packageList="epel-release rsyslog git socat fail2ban zip net-tools htop e2fsprogs ufw rkhunter debsums chrootkit rbash iptables-persistent iptables-services"
+packageList="epel-release rsyslog git socat fail2ban zip net-tools htop e2fsprogs ufw rkhunter debsums chrootkit rbash iptables-persistent iptables-services clamav clamav-daemon"
 install_package $packageList
 
 remove_package cron

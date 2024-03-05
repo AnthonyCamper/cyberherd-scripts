@@ -2,20 +2,41 @@
 
 # Function to detect package manager and install ClamAV
 install_clamav() {
-    # Detect package manager and install ClamAV
-    # Same as before
+    if command -v apt-get >/dev/null; then
+        echo "Using apt-get to install ClamAV..."
+        sudo apt-get update
+        sudo apt-get install -y clamav clamav-daemon
+    elif command -v yum >/dev/null; then
+        echo "Using yum to install ClamAV..."
+        sudo yum clean all
+        sudo yum install -y clamav-server clamav-data clamav-update clamav-filesystem clamav clamav-scanner-systemd clamav-devel clamav-lib clamav-server-systemd
+    elif command -v dnf >/dev/null; then
+        echo "Using dnf to install ClamAV..."
+        sudo dnf install -y clamav clamav-update
+    else
+        echo "Unsupported package manager. Exiting."
+        exit 1
+    fi
 }
 
 # Function to update virus database
 update_virus_database() {
-    # Update virus database
-    # Same as before
+    echo "Updating virus database..."
+    sudo systemctl stop clamav-freshclam
+    sudo freshclam
+    sudo systemctl start clamav-freshclam
 }
 
 # Function to configure ClamAV to disable data submission
 configure_clamav() {
-    # Configure ClamAV
-    # Same as before
+    echo "Configuring ClamAV to disable data submission..."
+    if [ -f /etc/clamav/freshclam.conf ]; then
+        sudo sed -i '/^#DataSubmissionEnabled/d' /etc/clamav/freshclam.conf
+        sudo sed -i '/^DataSubmissionEnabled/d' /etc/clamav/freshclam.conf
+        echo "DataSubmissionEnabled no" | sudo tee -a /etc/clamav/freshclam.conf > /dev/null
+    else
+        echo "ClamAV configuration file not found."
+    fi
 }
 
 # Function to create a systemd service and timer for regular scans
