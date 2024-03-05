@@ -51,6 +51,8 @@ elif [ "$operatingSystem" = "centos" ]; then
         sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
         sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
     fi
+    echo -e "\n\nScanning for binaries that are malicious/have been tampered with:\n--(rkhunter is false positive, ignore)--"
+    sudo rpm --verify
 
     if [ ! -f /root/chkrootkit/chkrootkit ]; then
         echo "Installing chkrootkit..."
@@ -73,7 +75,7 @@ elif [ "$operatingSystem" = "centos" ]; then
     
 elif [ "$operatingSystem" = "fedora" ]; then
     echo "$operatingSystem detected, using dnf..."
-        echo "$operatingSystem detected, using yum..."
+    echo "$operatingSystem detected, using yum..."
     sudo yum install epel-release -y -q
     sudo yum install rkhunter -y -q
 
@@ -82,6 +84,9 @@ elif [ "$operatingSystem" = "fedora" ]; then
         sudo sed -i 's/^UPDATE_MIRRORS=0/UPDATE_MIRRORS=1/' /etc/rkhunter.conf
         sudo sed -i 's/^MIRRORS_MODE=1/MIRRORS_MODE=0/' /etc/rkhunter.conf
     fi
+
+    echo -e "\n\nScanning for binaries that are malicious/have been tampered with:\n--(rkhunter is false positive, ignore)--"
+    sudo rpm --verify
 
     if [ ! -f /root/chkrootkit/chkrootkit ]; then
         echo "Installing chkrootkit..."
