@@ -23,7 +23,10 @@ update_system() {
 }
 
 install_package() {
-    sudo $pkgManager install -y "$@"
+    for pkg in "$@"; do
+        echo "Attempting to install $pkg..."
+        sudo $pkgManager install -y "$pkg" || echo "Failed to install $pkg. Skipping..."
+    done
 }
 
 remove_package() {
@@ -39,6 +42,7 @@ fix_missing_apt() {
         sudo apt update --fix-missing
     fi
 }
+
 enable_service() {
     sudo systemctl enable "$@"
     sudo systemctl start "$@"
@@ -50,13 +54,14 @@ fix_missing_apt
 update_system
 
 # Install packages
-install_package epel-release rsyslog git socat fail2ban zip net-tools htop e2fsprogs uf rkhunter debsums chrootkit rbash
+# Added iptables-persistent and iptables-services to the package list
+packageList="epel-release rsyslog git socat fail2ban zip net-tools htop e2fsprogs ufw rkhunter debsums chrootkit rbash iptables-persistent iptables-services"
+install_package $packageList
+
 remove_package cron
 
 # Special handling for UFW, considering its availability
-if [ "$pkgManager" = "apt" ] || [ "$pkgManager" = "yum" ] && command -v ufw > /dev/null; then
-    install_package ufw
-fi
+# Removed the UFW installation from here because it's now included directly in the package list
 
 # Enable and start fail2ban
 enable_service fail2ban
