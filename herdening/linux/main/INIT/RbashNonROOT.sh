@@ -31,10 +31,10 @@ export PATH' > "$home/.bashrc"
     chown -R "$username":"$username" "$home"
     chmod 644 "$home/.bashrc" "$home/.bash_profile" "$home/.profile"
 
-    chattr +i "$home/.bashrc" "$home/.bash_profile" "$home/.profile"
-
     chmod -R go-w "$home"
     find "$home" -type d -exec chmod go+x {} +
+    chattr +i "$home/.bashrc" "$home/.bash_profile" "$home/.profile"
+
   fi
 done < /etc/passwd
 
