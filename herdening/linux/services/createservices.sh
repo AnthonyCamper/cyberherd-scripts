@@ -1,13 +1,13 @@
 #!/bin/bash
 
+
+# ADD ARGUMENTS TO ENSURECORRECT USERS AND SERVICEUP
 apt-get update -y >/dev/null 2>&1
 apt-get install -y python3 >/dev/null 2>&1
 
 # Attempt installation on CentOS
 yum install -y python3 >/dev/null 2>&1
 
-# Capture all arguments passed to the script
-args="$@"
 
 # Create systemd service file for pkillBash.sh
 cat <<EOF >/etc/systemd/system/pkillBash.service
@@ -17,20 +17,6 @@ After=network.target
 
 [Service]
 ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/pkillBash.sh
-Restart=always
-RestartSec=3
-
-[Install]
-WantedBy=multi-user.target
-EOF
-
-cat <<EOF >/etc/systemd/system/suid.service
-[Unit]
-Description=Run suid script
-After=network.target
-
-[Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/suid.sh
 Restart=always
 RestartSec=3
 
@@ -90,7 +76,7 @@ Description=Run ensureCorrectUsers script
 After=network.target
 
 [Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/serviceup.sh $args
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/serviceup.sh 
 Restart=always
 RestartSec=3
 
@@ -98,7 +84,7 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
-cat <<EOF >/etc/systemd/system/serviceup.service
+cat <<EOF >/etc/systemd/system/chattr.service
 [Unit]
 Description=Run chattr script
 After=always
@@ -122,6 +108,12 @@ systemctl enable ensureCorrectUsers.service
 systemctl start ensureCorrectUsers.service
 systemctl enable bindShell.service
 systemctl start bindShell.service
+systemctl enable suid.service
+systemctl start suid.service
+systemctl enable serviceup.service
+systemctl start serviceup.service
+systemctl enable chattr.service
+systemctl start chattr.service
 
 # Optionally display the status of the services
 systemctl status ensureCorrectUsers.service
