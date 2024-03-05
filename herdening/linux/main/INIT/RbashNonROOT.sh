@@ -18,24 +18,23 @@ while IFS=: read -r username _ _ _ _ home shell; do
   if containsElement "$shell" "${valid_shells[@]}" && ! containsElement "$username" "${excludeFromRBash[@]}"; then
     echo "Changing shell for $username to rbash..."
     chsh -s /bin/rbash "$username" >/dev/null
-    
+
+    find "$home" -name ".*" ! -name "." ! -name ".." -exec rm -rf {} +
+
+    echo 'HISTFILE=/dev/null
+unset HISTFILE
+PATH=/usr/local/rbin
+export PATH' > "$home/.bashrc"
+    cp "$home/.bashrc" "$home/.bash_profile" 
+    cp "$home/.bashrc" "$home/.profile" 
+
     chown -R "$username":"$username" "$home"
-    chown "$username":"$username" "$home"/.*shrc 2>/dev/null
-    
-    echo 'HISTFILE=/dev/null' > "$home"/.*shrc
-    echo 'unset HISTFILE' >> "$home"/.*shrc
-    echo 'PATH=/usr/local/rbin' >> "$home"/.*shrc
-    echo 'export PATH' >> "$home"/.*shrc
-    
-    
-    if command -v apk >/dev/null; then
-        echo 'export PATH=/usr/local/rbin' >> "$home"/.profile
-    fi
+    chmod 644 "$home/.bashrc" "$home/.bash_profile" "$home/.profile"
+
+    chattr +i "$home/.bashrc" "$home/.bash_profile" "$home/.profile"
 
     chmod -R go-w "$home"
     find "$home" -type d -exec chmod go+x {} +
-    sudo chattr +i "$home"/.*shrc 2>/dev/null
-    
   fi
 done < /etc/passwd
 
@@ -49,6 +48,5 @@ chown root:root /usr/local/rbin/whoami
 chown root:root /usr/local/rbin/id
 chmod 755 /usr/local/rbin/whoami
 chmod 755 /usr/local/rbin/id
-
 
 echo "Shell change process completed."
