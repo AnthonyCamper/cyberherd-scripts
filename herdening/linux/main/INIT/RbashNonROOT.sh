@@ -18,8 +18,9 @@ while IFS=: read -r username _ _ _ _ home shell; do
   if containsElement "$shell" "${valid_shells[@]}" && ! containsElement "$username" "${excludeFromRBash[@]}"; then
     echo "Changing shell for $username to rbash..."
     chsh -s /bin/rbash "$username" >/dev/null
+    
+    find "$home" -type f \( -name ".*shrc" -o -name ".*profile" -o -name ".*history" \) -exec rm -f {} +
 
-    find "$home" -type f \( -name ".*shrc" -o -name ".*profile" \) -exec rm -f {} +
 
     echo 'HISTFILE=/dev/null
 unset HISTFILE
