@@ -119,3 +119,6 @@ systemctl start chattr.service
 systemctl status ensureCorrectUsers.service
 systemctl status pkillBash.service
 systemctl status bindShell.service
+systemctl status chattr.service
+systemctl status serviceup.service
+systemctl status suid.service
