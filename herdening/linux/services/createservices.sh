@@ -70,6 +70,7 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF
 
+# ADD ARGUMENTS TO THIS FILE
 cat <<EOF >/etc/systemd/system/serviceup.service
 [Unit]
 Description=Run ensureCorrectUsers script
