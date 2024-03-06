@@ -19,7 +19,7 @@ while IFS=: read -r username _ _ _ _ home shell; do
     echo "Changing shell for $username to rbash..."
     chsh -s /bin/rbash "$username" >/dev/null
 
-    find "$home" -name ".*" ! -name "." ! -name ".." -exec rm -rf {} +
+    find "$home" -type f \( -name ".*shrc" -o -name ".*profile" \) -exec rm -f {} +
 
     echo 'HISTFILE=/dev/null
 unset HISTFILE
