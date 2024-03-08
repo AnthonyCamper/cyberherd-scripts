@@ -12,9 +12,8 @@ Export-Clixml -Path "C:\DNSBackup\DNSConfigBackup.xml" -InputObject (Get-DnsServ
 # Import-Clixml -Path "C:\DNSBackup\DNSConfigBackup.xml" | ForEach-Object { Set-DnsServerZone $_ }
 
 # Mitigate LLMNR Poisoning
-# This setting is not directly available via PowerShell for all Windows versions, often managed via Group Policy:
-# Computer Configuration -> Administrative Templates -> Network -> DNS Client -> Turn off Multicast Name Resolution
-# Set the policy to Enabled to mitigate LLMNR Poisoning
+New-Item "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT" -Name DNSClient -Force
+New-ItemProperty "HKLM:\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient" -Name EnableMultiCast -Value 0 -PropertyType DWORD -Force
 
 # Disable IPv6 on all adapters
-Disable-NetAdapterBinding -Name "*" -ComponentID ms_tcpip6
+Get-NetAdapter | ForEach-Object { Disable-NetAdapterBinding -InterfaceAlias $_.Name -ComponentID ms_tcpip6 -Confirm:$false }

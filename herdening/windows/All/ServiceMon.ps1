@@ -12,3 +12,15 @@ Start-Job -ScriptBlock {
         Start-Sleep -Seconds 10  # Check every 10 seconds
     }
 }
+
+# Stop the Print Spooler service
+Stop-Service -Name Spooler -Force
+
+# Disable the Print Spooler service
+Set-Service -Name Spooler -StartupType Disabled
+
+Write-Host "Print Spooler service has been stopped and disabled."
+
+reg.exe add HKLM\SYSTEM\CurrentControlSet\Control /v DisableRemoteScmEndpoints /t REG_DWORD /d 1
+
+Write-Host "SCM defeaned to remote management."
