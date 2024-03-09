@@ -26,7 +26,7 @@ done
 sudo ufw enable
 
 # Restart UFW to apply changes
-sudo ufw restart
+sudo ufw reload
 
 # Check the status of UFW
 sudo ufw status verbose

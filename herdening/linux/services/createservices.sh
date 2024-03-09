@@ -77,7 +77,7 @@ Description=Run ensureCorrectUsers script
 After=network.target
 
 [Service]
-ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/serviceup.sh 
+ExecStart=/bin/bash /root/cyberherd-scripts/herdening/linux/services/servicesup.sh 
 Restart=always
 RestartSec=3
 
